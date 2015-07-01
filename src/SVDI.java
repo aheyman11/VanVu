@@ -7,8 +7,7 @@ import java.util.Random;
  * Implements Van Vu's SVD I algorithm for graph clustering.
  * We make the following assumptions: clusters area all the same size, interior/exterior edge probabilities
  * are the same regardless of the cluster (i.e, the "p-q model").
- * Main method takes in the number of a vertex number "a" as a command line argument and prints out the distances
- * from all vertices to vertex "a" after SVD I is used to find an appropriate geometric representation.
+ * Main method generates a random graph subject to the paramaters and uses SVD I to find an appropriate geometric representation.
  */
 public class SVDI {
     static int numClusters = 3;
@@ -46,17 +45,15 @@ public class SVDI {
             }
         }
         Matrix P_hat_matrix = new Matrix(P_hat); //Convert P_hat from double[][] to Matrix
-        //P_hat_matrix.print(3,3);
         SingularValueDecomposition SVD = new SingularValueDecomposition(P_hat_matrix);
         Matrix leftSingVects = SVD.getU();
         Matrix P_k_hatMatrix = leftSingVects.getMatrix(0, numVertices - 1, 0, numClusters - 1);
-        //P_k_hatMatrix.print(3,3);
         Matrix projection = (P_k_hatMatrix.times((P_k_hatMatrix.transpose().times(P_k_hatMatrix)).inverse())).times(P_k_hatMatrix.transpose());
         projectedPoints = projection.times(P_hat_matrix);
-        //projectedPoints.print(3,3);
-        distFromPointA(Integer.parseInt(args[0]));
+        projectedPoints.print(3,3);
     }
 
+    //Input int a is the index of a vertex. Returns a double[] containing distances from each vertex to a.
     public static double[] distFromPointA(int a) {
         double[] distFromPointA = new double[numVertices];
         double d = 0;
